@@ -1,5 +1,6 @@
 <template>
   <div class="landing-container">
+    <FallingLetters :isActive="currentSection === 0" />
     <div class="animated-background"></div>
     <section class="section first-section">
       <div class="content">
@@ -30,8 +31,18 @@
 </template>
 
 <script>
+import FallingLetters from "@/components/FallingLetters.vue";
+
 export default {
   name: "LandingPage",
+  components: {
+    FallingLetters,
+  },
+  data() {
+    return {
+      currentSection: 0,
+    };
+  },
   mounted() {
     this.initScrollAnimation();
   },
@@ -39,10 +50,10 @@ export default {
     initScrollAnimation() {
       const sections = document.querySelectorAll(".section");
       let isScrolling = false;
-      let currentSection = 0;
 
       const scrollToSection = (index) => {
         isScrolling = true;
+        this.currentSection = index;
         sections[index].scrollIntoView({ behavior: "smooth" });
         setTimeout(() => {
           isScrolling = false;
@@ -52,12 +63,10 @@ export default {
       window.addEventListener("wheel", (e) => {
         if (isScrolling) return;
 
-        if (e.deltaY > 0 && currentSection < sections.length - 1) {
-          currentSection++;
-          scrollToSection(currentSection);
-        } else if (e.deltaY < 0 && currentSection > 0) {
-          currentSection--;
-          scrollToSection(currentSection);
+        if (e.deltaY > 0 && this.currentSection < sections.length - 1) {
+          scrollToSection(this.currentSection + 1);
+        } else if (e.deltaY < 0 && this.currentSection > 0) {
+          scrollToSection(this.currentSection - 1);
         }
       });
     },
