@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <div v-if="!isLoggedIn" class="login-card">
+    <div class="login-card">
       <div class="profile-icon">
         <i class="fas fa-user"></i>
       </div>
@@ -37,10 +37,6 @@
         <p v-if="error" class="error-message">{{ error }}</p>
       </div>
     </div>
-    <div v-else class="welcome-container">
-      <h2>환영합니다, {{ currentUser.username }}님!</h2>
-      <button class="logout-button" @click="handleLogout">로그아웃</button>
-    </div>
   </div>
 </template>
 
@@ -53,18 +49,19 @@ export default {
     return {
       username: "",
       password: "",
-      isLoggedIn: false,
-      currentUser: null,
       error: "",
       rememberMe: false,
     };
   },
   mounted() {
-    this.checkLoginStatus();
     const savedUsername = localStorage.getItem("rememberedUsername");
     if (savedUsername) {
       this.username = savedUsername;
       this.rememberMe = true;
+    }
+    // 이미 로그인된 상태라면 검색 페이지로 리다이렉트
+    if (auth.checkAuth()) {
+      this.$router.push("/search");
     }
   },
   methods: {
@@ -76,9 +73,6 @@ export default {
 
       try {
         const user = auth.login(this.username, this.password);
-        this.isLoggedIn = true;
-        this.currentUser = user;
-        this.error = "";
 
         if (this.rememberMe) {
           localStorage.setItem("rememberedUsername", this.username);
@@ -88,33 +82,25 @@ export default {
 
         this.password = "";
 
-        console.log("로그인 성공:", this.currentUser.username);
+        // 로그인 성공 시 검색 페이지로 리다이렉트
+        this.$router.push("/search");
+
+        console.log("로그인 성공:", user.username);
       } catch (error) {
         this.error = "로그인에 실패했습니다.";
         console.error("로그인 에러:", error);
       }
     },
-
-    handleLogout() {
-      auth.logout();
-      this.isLoggedIn = false;
-      this.currentUser = null;
-      if (!this.rememberMe) {
-        this.username = "";
-      }
-      this.password = "";
-      console.log("로그아웃 완료");
-    },
-
-    checkLoginStatus() {
-      const user = auth.checkAuth();
-      if (user) {
-        this.currentUser = user;
-        this.isLoggedIn = true;
-      } else {
-        this.handleLogout();
-      }
-    },
+    //handleLogout() {
+    //  auth.logout();
+    //  this.isLoggedIn = false;
+    //  this.currentUser = null;
+    //  if (!this.rememberMe) {
+    //  this.username = "";
+    //  }
+    //  this.password = "";
+    //  console.log("로그아웃 완료");
+    //},
   },
   watch: {
     rememberMe(newValue) {
@@ -321,38 +307,5 @@ export default {
   margin-top: 10px;
   font-size: 14px;
   text-align: center;
-}
-
-.welcome-container {
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 20px;
-  padding: 40px;
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  z-index: 1;
-}
-
-.welcome-container h2 {
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.logout-button {
-  padding: 12px 24px;
-  background: #03c75a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.logout-button:hover {
-  background: #02a347;
 }
 </style>
