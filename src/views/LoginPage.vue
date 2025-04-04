@@ -4,7 +4,7 @@
       <div class="profile-icon">
         <i class="fas fa-user"></i>
       </div>
-      <div class="login-form">
+      <form class="login-form" @submit.prevent="handleLogin">
         <div class="form-group">
           <div class="input-with-icon">
             <i class="fas fa-user"></i>
@@ -33,9 +33,9 @@
             <span>Remember me</span>
           </label>
         </div>
-        <button class="login-button" @click="handleLogin">LOGIN</button>
+        <button type="submit" class="login-button">LOGIN</button>
         <p v-if="error" class="error-message">{{ error }}</p>
-      </div>
+      </form>
     </div>
   </div>
 </template>
@@ -91,16 +91,6 @@ export default {
         console.error("로그인 에러:", error);
       }
     },
-    //handleLogout() {
-    //  auth.logout();
-    //  this.isLoggedIn = false;
-    //  this.currentUser = null;
-    //  if (!this.rememberMe) {
-    //  this.username = "";
-    //  }
-    //  this.password = "";
-    //  console.log("로그아웃 완료");
-    //},
   },
   watch: {
     rememberMe(newValue) {

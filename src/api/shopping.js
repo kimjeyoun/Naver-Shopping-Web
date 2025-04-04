@@ -6,11 +6,10 @@ const shoppingAPI = {
     try {
       const response = await axios.get("/api/v1/search/shop.json", {
         params: {
-          query: encodeURIComponent(query),
+          query: query,
           display: params.display || 20,
           start: params.start || 1,
           sort: params.sort || "sim",
-          ...params,
         },
         headers: {
           "X-Naver-Client-Id": NAVER_API_CONFIG.CLIENT_ID,
