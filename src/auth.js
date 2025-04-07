@@ -9,17 +9,21 @@ export default {
       sub: user.id,
       username: user.username,
       exp: Date.now() + 3600000,
+      // 한시간 유지
     };
 
-    const stringifiedHeader = btoa(JSON.stringify(header));
-    const stringifiedPayload = btoa(JSON.stringify(payload));
+    // 한글 처리를 위해 encodeURIComponent 사용
+    const stringifiedHeader = btoa(encodeURIComponent(JSON.stringify(header)));
+    const stringifiedPayload = btoa(
+      encodeURIComponent(JSON.stringify(payload))
+    );
 
     return `${stringifiedHeader}.${stringifiedPayload}.mocksignature`;
   },
 
   validateToken(token) {
     try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
+      const payload = JSON.parse(decodeURIComponent(atob(token.split(".")[1])));
       return payload.exp > Date.now();
     } catch (e) {
       return false;
@@ -38,7 +42,8 @@ export default {
       username,
       // 실제 환경에서는 절대 비밀번호를 저장하면 안됨
       // 여기서는 로그인 검증용으로만 사용
-      hashedPassword: btoa(password), // 간단한 인코딩 (실제로는 더 강력한 해싱 필요)
+      // 한글 처리를 위해 encodeURIComponent 사용
+      hashedPassword: btoa(encodeURIComponent(password)),
     };
 
     const token = this.generateToken(user);
