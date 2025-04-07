@@ -5,6 +5,16 @@
         <i class="fas fa-user"></i>
       </div>
       <form class="login-form" @submit.prevent="handleLogin">
+        <div class="help-tooltip">
+          <span class="help-text">How to login?</span>
+          <div class="tooltip-content">
+            <p>이 사이트는 테스트용 로그인 시스템을 사용합니다.</p>
+            <p>• 아이디와 비밀번호는 자유롭게 입력 가능</p>
+            <p>• 회원정보는 저장되지 않음</p>
+            <p>• 일회용 로그인으로 사용</p>
+            <p>• 실제 사용자 확인을 위한 용도</p>
+          </div>
+        </div>
         <div class="form-group">
           <div class="input-with-icon">
             <i class="fas fa-user"></i>
@@ -297,5 +307,53 @@ export default {
   margin-top: 10px;
   font-size: 14px;
   text-align: center;
+}
+
+.help-tooltip {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+  cursor: help;
+}
+
+.help-text {
+  color: #03c75a;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.tooltip-content {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  width: 250px;
+  background-color: white;
+  color: #333;
+  text-align: left;
+  padding: 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.help-tooltip:hover .tooltip-content {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-content p {
+  margin: 8px 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.tooltip-content p:first-child {
+  font-weight: bold;
+  color: #03c75a;
+  margin-bottom: 12px;
 }
 </style>
