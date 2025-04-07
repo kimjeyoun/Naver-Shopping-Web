@@ -2,6 +2,9 @@
   <div class="search-container">
     <div class="header">
       <div class="logout-wrapper">
+        <span class="username">
+          <i class="fas fa-user"></i> {{ currentUser?.username || "" }}
+        </span>
         <button class="logout-button" @click="handleLogout">
           <i class="fas fa-sign-out-alt"></i> 로그아웃
         </button>
@@ -19,6 +22,26 @@
         <button class="search-button" @click="handleSearch">
           <i class="fas fa-search"></i>
         </button>
+      </div>
+
+      <!-- 정렬 필터 추가 -->
+      <div class="sort-filter">
+        <button
+          class="filter-button"
+          @click="showSortOptions = !showSortOptions"
+        >
+          <i class="fas fa-filter"></i> 필터
+        </button>
+        <div v-if="showSortOptions" class="sort-dropdown">
+          <button
+            v-for="option in sortOptions"
+            :key="option.value"
+            :class="['sort-option', { active: currentSort === option.value }]"
+            @click="changeSort(option.value)"
+          >
+            {{ option.label }}
+          </button>
+        </div>
       </div>
     </div>
     <div v-if="isLoading && !items.length" class="loading">검색 중...</div>
@@ -98,6 +121,15 @@ export default {
       totalResults: 0, // 전체 검색 결과 수
       noMoreData: false, // 더 이상 불러올 데이터가 없는지 여부
       isSearching: false, // 새로운 검색 진행 중인지 여부
+      currentSort: "sim", // 현재 정렬 방식 (기본값: 정확도순)
+      showSortOptions: false, // 정렬 옵션 드롭다운 표시 여부
+      sortOptions: [
+        { value: "sim", label: "정확도순" },
+        { value: "date", label: "날짜순" },
+        { value: "asc", label: "가격 낮은순" },
+        { value: "dsc", label: "가격 높은순" },
+      ],
+      currentUser: auth.checkAuth(), // checkAuth로 현재 사용자 정보 가져오기
     };
   },
   mounted() {
@@ -137,6 +169,7 @@ export default {
         const results = await shoppingAPI.search(this.searchQuery, {
           start: (this.currentPage - 1) * this.itemsPerPage + 1,
           display: this.itemsPerPage,
+          sort: this.currentSort,
         });
 
         // 첫 검색일 경우 전체 결과 수 저장
@@ -165,8 +198,15 @@ export default {
     },
 
     handleScroll() {
-      // 로딩 중이거나 검색 중이거나 더 이상 데이터가 없으면 중단
-      if (this.isLoading || this.isSearching || this.noMoreData) return;
+      // 검색어가 없거나, 로딩 중이거나, 검색 중이거나, 더 이상 데이터가 없으면 중단
+      if (
+        !this.searchQuery.trim() || // 검색어 체크 추가
+        !this.items.length || // 검색 결과가 없는 경우 체크 추가
+        this.isLoading ||
+        this.isSearching ||
+        this.noMoreData
+      )
+        return;
 
       // 현재 스크롤 위치 계산 (현재 스크롤 위치 + 화면 높이)
       const scrollPosition = window.pageYOffset + window.innerHeight;
@@ -185,6 +225,26 @@ export default {
       auth.logout();
       this.$router.push("/login");
     },
+
+    async changeSort(sortValue) {
+      // 검색어가 없을 경우 처리
+      if (!this.searchQuery.trim()) {
+        this.error = "검색어를 입력해주세요.";
+        this.showSortOptions = false;
+        return;
+      }
+
+      this.currentSort = sortValue;
+      this.showSortOptions = false;
+
+      // 정렬 변경 시 처음부터 다시 검색
+      this.items = [];
+      this.currentPage = 1;
+      this.noMoreData = false;
+      this.error = null; // 에러 메시지 초기화
+
+      await this.fetchItems();
+    },
   },
 };
 </script>
@@ -197,7 +257,7 @@ export default {
 }
 
 .header {
-  position: fixed;
+  position: relative;
   top: 0;
   right: 0;
   padding: 20px;
@@ -207,6 +267,25 @@ export default {
 .logout-wrapper {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+.username {
+  padding: 8px 16px;
+  background-color: white;
+  color: #03c75a;
+  border: 1px solid #03c75a;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.username i {
+  font-size: 14px;
 }
 
 .logout-button {
@@ -402,5 +481,61 @@ export default {
   padding: 20px;
   color: #666;
   font-style: italic;
+}
+
+.sort-filter {
+  margin-top: 15px;
+  position: relative;
+}
+
+.filter-button {
+  padding: 8px 16px;
+  background-color: white;
+  border: 1px solid #03c75a;
+  color: #03c75a;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-button:hover {
+  background-color: #f5f5f5;
+}
+
+.sort-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 5px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  min-width: 150px;
+}
+
+.sort-option {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.sort-option:hover {
+  background-color: #f5f5f5;
+}
+
+.sort-option.active {
+  color: #03c75a;
+  font-weight: bold;
+  background-color: #f0f9f4;
 }
 </style>
