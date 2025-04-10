@@ -1,4 +1,0 @@
-export const NAVER_API_CONFIG = {
-  CLIENT_ID: "Genk26skI08HjO9BsNL8",
-  CLIENT_SECRET: "H0DBbbrdUK",
-};

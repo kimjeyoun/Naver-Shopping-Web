@@ -1,5 +1,4 @@
 import axios from "axios";
-import { NAVER_API_CONFIG } from "./config";
 
 const shoppingAPI = {
   search: async (query, params = {}) => {
@@ -12,8 +11,8 @@ const shoppingAPI = {
           sort: params.sort || "sim",
         },
         headers: {
-          "X-Naver-Client-Id": NAVER_API_CONFIG.CLIENT_ID,
-          "X-Naver-Client-Secret": NAVER_API_CONFIG.CLIENT_SECRET,
+          "X-Naver-Client-Id": process.env.VUE_APP_NAVER_CLIENT_ID,
+          "X-Naver-Client-Secret": process.env.VUE_APP_NAVER_CLIENT_SECRET,
         },
       });
       return response.data;
