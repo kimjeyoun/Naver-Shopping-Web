@@ -26,7 +26,7 @@
         <h2>시작하기</h2>
         <div class="button-container">
           <button class="login-button" @click="goToLogin">로그인하기</button>
-          <button class="chatbot-button" @click="goToChatbot">챗봇 문의</button>
+          <button class="chatbot-button" @click="goToChatbot">Chatbot</button>
         </div>
       </div>
     </section>
@@ -296,7 +296,7 @@ export default {
 
 .chatbot-button {
   margin-top: 2rem;
-  padding: 1rem 3.3rem;
+  padding: 1rem 3.7rem;
   font-size: 1.2rem;
   background-color: #4527a0;
   color: white;
