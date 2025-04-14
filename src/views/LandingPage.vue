@@ -24,7 +24,10 @@
     <section class="section third-section">
       <div class="content">
         <h2>시작하기</h2>
-        <button class="login-button" @click="goToLogin">로그인하기</button>
+        <div class="button-container">
+          <button class="login-button" @click="goToLogin">로그인하기</button>
+          <button class="chatbot-button" @click="goToChatbot">Chatbot</button>
+        </div>
       </div>
     </section>
   </div>
@@ -93,6 +96,9 @@ export default {
     },
     goToLogin() {
       this.$router.push("/login");
+    },
+    goToChatbot() {
+      this.$router.push("/chatbot");
     },
   },
   mounted() {
@@ -279,5 +285,34 @@ export default {
     opacity: 1;
     transform: translateZ(0);
   }
+}
+
+.button-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.chatbot-button {
+  margin-top: 2rem;
+  padding: 1rem 3.7rem;
+  font-size: 1.2rem;
+  background-color: #4527a0;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.third-section.active .chatbot-button {
+  animation: fadeInUp 0.8s ease forwards 0.5s;
+}
+
+.chatbot-button:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
 }
 </style>

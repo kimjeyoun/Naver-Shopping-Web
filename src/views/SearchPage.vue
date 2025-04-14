@@ -132,3 +132,7 @@ export default {
   },
 };
 </script>
+
+<style>
+/* 기존 스타일 제거 */
+</style>
