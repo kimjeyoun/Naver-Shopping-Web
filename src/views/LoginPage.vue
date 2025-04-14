@@ -119,7 +119,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   /* 더 다양한 색상의 그라데이션 */
   background: linear-gradient(
     135deg,
@@ -155,7 +156,6 @@ export default {
   background-size: 200% 200%;
   animation: gradientAnimation 15s ease infinite;
   position: relative;
-  overflow: hidden;
 }
 
 /* 움직이는 그라데이션 효과 */

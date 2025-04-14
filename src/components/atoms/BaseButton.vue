@@ -6,6 +6,7 @@
   <!-- 여기서 click을 emit으로 선언했기 때문에 위에서 basebutton을 사용하면서 @click이 사용 가능, 전달의 개념 -->
   <button
     :class="['base-button', variant, { active: isActive }]"
+    :style="buttonStyles"
     @click="$emit('click', $event)"
   >
     <slot></slot>
@@ -26,6 +27,28 @@ export default {
       type: Boolean,
       default: false,
     },
+    backgroundColor: {
+      type: String,
+      default: "#03c75a",
+    },
+    textColor: {
+      type: String,
+      default: "white",
+    },
+    borderColor: {
+      type: String,
+      default: "",
+    },
+  },
+  computed: {
+    buttonStyles() {
+      const styles = {
+        "--button-bg": this.backgroundColor,
+        "--button-text": this.textColor,
+        "--button-border": this.borderColor || this.backgroundColor,
+      };
+      return styles;
+    },
   },
 };
 </script>
@@ -43,38 +66,38 @@ export default {
 }
 
 .base-button.primary {
-  background-color: #03c75a;
-  color: white;
+  background-color: var(--button-bg);
+  color: var(--button-text);
   border: none;
 }
 
 .base-button.primary:hover {
-  background-color: #02a347;
+  opacity: 0.9;
 }
 
 .base-button.secondary {
-  background-color: white;
-  color: #03c75a;
-  border: 1px solid #03c75a;
+  background-color: transparent;
+  color: var(--button-bg);
+  border: 1px solid var(--button-border);
 }
 
 .base-button.secondary:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .base-button.filter {
-  background-color: white;
-  border: 1px solid #03c75a;
-  color: #03c75a;
+  background-color: transparent;
+  border: 1px solid var(--button-border);
+  color: var(--button-bg);
 }
 
 .base-button.filter:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .base-button.active {
-  background-color: #f0f9f4;
-  color: #03c75a;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: var(--button-bg);
   font-weight: bold;
 }
 </style>
