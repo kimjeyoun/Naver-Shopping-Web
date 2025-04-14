@@ -134,39 +134,5 @@ export default {
 </script>
 
 <style>
-.search-container {
-  min-height: 100vh;
-  height: 100vh;
-  padding: 20px;
-  background-color: #f5f6f7;
-  overflow-y: auto;
-}
-
-.header {
-  position: relative;
-  top: 0;
-  right: 0;
-  padding: 20px;
-  z-index: 100;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.search-header {
-  max-width: 800px;
-  margin: 0 auto;
-  padding-top: 40px;
-}
-
-.loading,
-.error {
-  text-align: center;
-  margin-top: 20px;
-}
-
-/* 검색 결과가 없을 때는 컨테이너 높이를 100vh로 고정 */
-.search-container:not(:has(.product-grid)) {
-  height: 100vh;
-  overflow: hidden;
-}
+/* 기존 스타일 제거 */
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="search-container">
+  <div class="search-container" :class="{ 'has-results': items.length > 0 }">
     <div class="header">
       <UserInfo :username="username" @logout="$emit('logout')" />
     </div>
@@ -75,24 +75,35 @@ export default {
 <style scoped>
 .search-container {
   min-height: 100vh;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
   background-color: #f5f6f7;
+  overflow: hidden; /* 초기 상태에서는 스크롤 숨김 */
+}
+
+/* 검색 결과가 있을 때 스크롤 허용 */
+.search-container.has-results {
+  overflow: visible;
+  height: auto;
 }
 
 .header {
-  position: relative;
+  position: sticky;
   top: 0;
-  right: 0;
   padding: 20px;
   z-index: 100;
   display: flex;
   justify-content: flex-end;
+  background-color: #f5f6f7;
 }
 
 .search-header {
+  padding: 20px;
   max-width: 800px;
   margin: 0 auto;
-  padding-top: 40px;
+  width: 100%;
+  background-color: #f5f6f7;
+  z-index: 99;
 }
 
 .loading,
