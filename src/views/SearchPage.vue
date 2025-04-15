@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import auth from "@/auth";
+import auth from "@/services/auth";
 import shoppingAPI from "@/api/shopping";
 import SearchTemplate from "@/components/templates/SearchTemplate.vue";
 

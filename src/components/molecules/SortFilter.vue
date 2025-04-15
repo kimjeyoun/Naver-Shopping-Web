@@ -52,7 +52,6 @@ export default {
   methods: {
     toggleOptions() {
       this.showOptions = !this.showOptions;
-      console.log("필터 메뉴 상태:", this.showOptions);
     },
     handleSort(value) {
       this.showOptions = false;
@@ -87,6 +86,7 @@ export default {
   position: absolute;
   top: 100%;
   left: 0;
+  background-color: white;
   min-width: 150px;
   border-radius: 4px;
   display: flex;

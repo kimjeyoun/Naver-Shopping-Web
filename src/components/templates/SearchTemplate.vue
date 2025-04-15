@@ -88,8 +88,6 @@ export default {
 }
 
 .header {
-  position: sticky;
-  top: 0;
   padding: 20px;
   z-index: 100;
   display: flex;
