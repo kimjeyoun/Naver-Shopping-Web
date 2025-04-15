@@ -48,7 +48,6 @@ export default {
 
     const token = this.generateToken(user);
     localStorage.setItem("token", token);
-    console.log("token : ", token);
 
     // 저장할 때는 비밀번호 정보 제외
     const userForStorage = {

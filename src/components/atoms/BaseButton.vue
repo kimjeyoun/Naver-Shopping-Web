@@ -86,7 +86,7 @@ export default {
 }
 
 .base-button.filter {
-  background-color: transparent;
+  background-color: white;
   border: 1px solid var(--button-border);
   color: var(--button-bg);
 }

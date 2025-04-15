@@ -1,5 +1,8 @@
 <template>
   <div class="login-container">
+    <div class="back-button" @click="goBack">
+      <i class="fas fa-arrow-left"></i>
+    </div>
     <div class="login-card">
       <div class="profile-icon">
         <i class="fas fa-user"></i>
@@ -51,7 +54,7 @@
 </template>
 
 <script>
-import auth from "@/auth";
+import auth from "@/services/auth";
 
 export default {
   name: "LoginPage",
@@ -82,7 +85,7 @@ export default {
       }
 
       try {
-        const user = auth.login(this.username, this.password);
+        auth.login(this.username, this.password);
 
         if (this.rememberMe) {
           localStorage.setItem("rememberedUsername", this.username);
@@ -94,12 +97,13 @@ export default {
 
         // 로그인 성공 시 검색 페이지로 리다이렉트
         this.$router.push("/search");
-
-        console.log("로그인 성공:", user.username);
       } catch (error) {
         this.error = "로그인에 실패했습니다.";
         console.error("로그인 에러:", error);
       }
+    },
+    goBack() {
+      this.$router.push("/");
     },
   },
   watch: {
@@ -152,7 +156,6 @@ export default {
       #019454 80%,
       #017e47 100%
     );
-  padding: 20px;
   background-size: 200% 200%;
   animation: gradientAnimation 15s ease infinite;
   position: relative;
@@ -355,5 +358,30 @@ export default {
   font-weight: bold;
   color: #03c75a;
   margin-bottom: 12px;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: #02a347;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+
+.back-button:hover {
+  transform: scale(1.1);
+}
+
+.back-button i {
+  font-size: 1.2rem;
 }
 </style>
